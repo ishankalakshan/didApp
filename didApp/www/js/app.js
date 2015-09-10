@@ -1,4 +1,4 @@
-var didApp = angular.module('didApp', ['ionic','didApp.controllers'])
+var didApp = angular.module('didApp', ['ionic','didApp.controllers','didApp.service'])
 
 didApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
