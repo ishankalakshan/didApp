@@ -1,11 +1,6 @@
-// Ionic Starter App
+var didApp = angular.module('didApp', ['ionic','didApp.controllers'])
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
-
-.run(function($ionicPlatform) {
+didApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,4 +11,24 @@ angular.module('starter', ['ionic'])
       StatusBar.styleDefault();
     }
   });
+})
+
+didApp.config(function($stateProvider,$urlRouterProvider){
+    $stateProvider
+      .state('login',{
+        url:'/',
+        templateUrl:'templates/login.html',
+        controller:'MainCtrl'
+      })
+      .state('weekProgress',{
+        url:'/weekProgress',
+        templateUrl:'templates/weekProgress.html',
+        controller:'weekProgressCtrl'
+      })
+      .state('dayProgress',{
+        url:'/dayProgress',
+        templateUrl:'templates/dayProgress.html',
+        controller:'dayProgressCtrl'
+      })
+      $urlRouterProvider.otherwise('/');
 })
