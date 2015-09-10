@@ -1,4 +1,4 @@
-var didApp = angular.module('didApp', ['ionic','didApp.controllers','didApp.service'])
+var didApp = angular.module('didApp', ['ionic','angularMoment','didApp.controllers','didApp.service'])
 
 didApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -23,7 +23,9 @@ didApp.config(function($stateProvider,$urlRouterProvider){
       .state('weekProgress',{
         url:'/weekProgress',
         templateUrl:'templates/weekProgress.html',
-        controller:'weekProgressCtrl'
+        controller:'weekProgressCtrl',
+        params : {currentWeekNumber : '',
+                  currentYearNumber : ''}
       })
       .state('dayProgress',{
         url:'/dayProgress',
