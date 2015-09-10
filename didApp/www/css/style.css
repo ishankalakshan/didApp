@@ -30,3 +30,11 @@
   width: 30px;
   height: 30px;
 }
+.icon-ignore{
+  content: url('icons/icon-ignore.png');
+  width: 30px;
+  height: 30px;
+}
+.button-bar{
+  background-color: #FDF3E2;
+}

@@ -30,5 +30,10 @@ didApp.config(function($stateProvider,$urlRouterProvider){
         templateUrl:'templates/dayProgress.html',
         controller:'dayProgressCtrl'
       })
+      .state('projectProgress',{
+        url:'/projectProgress',
+        templateUrl:'templates/projectProgress.html',
+        controller:'projectProgressCtrl'
+      })
       $urlRouterProvider.otherwise('/');
 })
