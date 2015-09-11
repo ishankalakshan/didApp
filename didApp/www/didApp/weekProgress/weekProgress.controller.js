@@ -1,24 +1,14 @@
-angular.module('didApp.controllers', ['angularMoment'])
+angular.module('didApp.weekProgressController', ['angularMoment'])
 
-.controller('MainCtrl',['$scope',MainCtrl])
 .controller('weekProgressCtrl',['$scope','$stateParams','didAppDataService',weekProgressCtrl])
-.controller('dayProgressCtrl',['$scope',dayProgressCtrl])
-.controller('projectProgressCtrl',['$scope',projectProgressCtrl])
-
-function MainCtrl($scope){
-
-  $scope.currentWeekNumber = moment().format('WW');
-  $scope.currentYearNumber = moment().format('YYYY');
-};
 
 function weekProgressCtrl($scope,$stateParams,didAppDataService){
 
   $scope.timesheet = [];
-  $scope.weekStartend = getWeekStartEnd($stateParams.currentWeekNumber,$stateParams.currentYearNumber);
-  console.log($scope.weekStartend);
-
-
-
+  $scope.weeklyTimesheet = [];
+  $scope.weekCount = $stateParams.currentWeekNumber*1;
+  $scope.yearCount = $stateParams.currentYearNumber*1;
+  $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
 
   $scope.$on('didApp.didmobiledata',function(_,result){
     result.feed.entry.forEach(function(b){
@@ -55,21 +45,29 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
   function getWeekStartEnd(weekNumber,yearNumber){
       var weekStartEnd = {
         weekNumber : weekNumber,
-        weekStart : moment(weekNumber+yearNumber,'WWYYYY').startOf('isoWeek').format('MMM, dddd DD'),
-        weekEnd : moment(weekNumber+yearNumber,'WWYYYY').endOf('isoWeek').day(-2).format('MMM, dddd DD')
+        weekStart : moment(String(weekNumber)+ yearNumber,'WWYYYY').startOf('isoWeek').format('MMM, dddd DD'),
+        weekEnd : moment(String(weekNumber)+yearNumber,'WWYYYY').endOf('isoWeek').day(-2).format('MMM, dddd DD')
       };
     return weekStartEnd;
   };
-
-  $scope.getDate = function(){
-    $scope.weekStartend = getWeekStartEnd('38','2014');
+  $scope.getWeeklyTimesheet = function(weekNumber,yearNumber){
+      for (i = 0; i < $scope.timesheet.length; i++) {
+              if ($scope.timesheet[i].weekNumber==weekNumber&&$scope.timesheet[i].yearNumber==yearNumber) {
+                  console.log($scope.timesheet[i]);
+              }
+        }
+  };
+  $scope.addOneWeek =function(){
+    $scope.weekCount += 1;
+    $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
+    console.log($scope.weekStartend);
+  };
+  $scope.substractOneWeek =function(){
+    $scope.weekCount -= 1;
+    $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
+    console.log($scope.weekStartend);
   };
 
 
+
 };//end of weekProgressCtrl
-function dayProgressCtrl($scope){
-  console.log('dayProgressCtrl');
-};
-function projectProgressCtrl(){
-  console.log('projectProgressCtrl');
-};

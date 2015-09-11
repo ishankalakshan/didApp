@@ -1,4 +1,10 @@
-var didApp = angular.module('didApp', ['ionic','angularMoment','didApp.controllers','didApp.service'])
+var didApp = angular.module('didApp', ['ionic',
+                                       'angularMoment',
+                                       'didApp.weekProgressController',
+                                       'didApp.loginController',
+                                       'didApp.dayProgressController',
+                                       'didApp.projectProgressController',
+                                       'didApp.service'])
 
 didApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -17,24 +23,24 @@ didApp.config(function($stateProvider,$urlRouterProvider){
     $stateProvider
       .state('login',{
         url:'/',
-        templateUrl:'templates/login.html',
-        controller:'MainCtrl'
+        templateUrl:'didApp/login/login.html',
+        controller:'loginCtrl'
       })
       .state('weekProgress',{
         url:'/weekProgress',
-        templateUrl:'templates/weekProgress.html',
+        templateUrl:'didApp/weekProgress/weekProgress.html',
         controller:'weekProgressCtrl',
         params : {currentWeekNumber : '',
                   currentYearNumber : ''}
       })
       .state('dayProgress',{
         url:'/dayProgress',
-        templateUrl:'templates/dayProgress.html',
+        templateUrl:'didApp/dayProgress/dayProgress.html',
         controller:'dayProgressCtrl'
       })
       .state('projectProgress',{
         url:'/projectProgress',
-        templateUrl:'templates/projectProgress.html',
+        templateUrl:'didApp/projectProgress/projectProgress.html',
         controller:'projectProgressCtrl'
       })
       $urlRouterProvider.otherwise('/');

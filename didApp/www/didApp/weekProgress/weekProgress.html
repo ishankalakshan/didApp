@@ -1,4 +1,19 @@
 <ion-view view-title="{{'Week ' + weekStartend.weekNumber}}" hide-back-button='true'>
+
+  <ion-nav-buttons side="right">
+      <button class="button button-clear" ui-sref='login'>
+        <i class='icon ion-log-out'></i>
+      </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="left">
+      <button class="button button-clear" ng-click='substractOneWeek()'>
+        <i class='icon ion-ios-minus-outline'></i>
+      </button>
+      <button class="button button-clear" ng-click='addOneWeek()'>
+        <i class='icon ion-ios-plus-outline'></i>
+      </button>
+  </ion-nav-buttons>
+
     <ion-content>
       <ion-list>
         <ion-item>
@@ -13,7 +28,7 @@
         <ion-item>
           <div class="row">
             <div class="col">Tue</div>
-            <div class="col">{{getWeekStartEnd('37').weekEnd}}</div>
+            <div class="col">5.5h</div>
             <div class="col"><button class="button button-small button-clear">
               <i class='icon icon-approved'></i>
             </button></div>
@@ -21,7 +36,7 @@
         </ion-item>
         <ion-item>
           <div class="row">
-            <div class="col">{{getWeekStartEnd('37').weekStart}}</div>
+            <div class="col">7h</div>
             <div class="col">7.5h</div>
             <div class="col"><button class="button button-small button-clear">
               <i class='icon icon-approved'></i>
