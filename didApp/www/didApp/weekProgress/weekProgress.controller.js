@@ -4,6 +4,7 @@ angular.module('didApp.weekProgressController', ['angularMoment'])
 
 function weekProgressCtrl($scope,$stateParams,didAppDataService){
 
+  didAppDataService.loadData();
   $scope.timesheet = [];
   $scope.weeklyTimesheet = [];
   $scope.weekCount = $stateParams.currentWeekNumber*1;
@@ -40,7 +41,6 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
     });
   });
 
-  didAppDataService.loadData();
 
   function getWeekStartEnd(weekNumber,yearNumber){
       var weekStartEnd = {
@@ -49,24 +49,27 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
         weekEnd : moment(String(weekNumber)+yearNumber,'WWYYYY').endOf('isoWeek').day(-2).format('MMM, dddd DD')
       };
     return weekStartEnd;
-  };
+  };//end of getWeekStartEnd()
+
   $scope.getWeeklyTimesheet = function(weekNumber,yearNumber){
-      for (i = 0; i < $scope.timesheet.length; i++) {
-              if ($scope.timesheet[i].weekNumber==weekNumber&&$scope.timesheet[i].yearNumber==yearNumber) {
-                  console.log($scope.timesheet[i]);
-              }
-        }
-  };
+      $scope.timesheet.forEach(function(entry){
+        if (entry.weekNumber==weekNumber && entry.yearNumber==yearNumber) {
+
+        }//end if
+      });//end forEach
+  };//end of getWeeklyTimesheet()
+
   $scope.addOneWeek =function(){
     $scope.weekCount += 1;
     $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
     console.log($scope.weekStartend);
-  };
+  };//end of addOneWeek()
+
   $scope.substractOneWeek =function(){
     $scope.weekCount -= 1;
     $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
     console.log($scope.weekStartend);
-  };
+  };//end of substractOneWeek()
 
 
 
