@@ -5,7 +5,7 @@ angular.module('didApp.weekProgressController', ['angularMoment'])
 function weekProgressCtrl($scope,$stateParams,didAppDataService){
 
 
-  $scope.weeklyTimesheet = [];
+
   $scope.weekCount = $stateParams.currentWeekNumber*1;
   $scope.yearCount = $stateParams.currentYearNumber*1;
 
@@ -15,8 +15,10 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
   ionic.Platform.ready(function(){
     didAppDataService.loadData();
     $scope.timesheet = [];
-    $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount); 
-
+    $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
+    $scope.weeklyTimesheet = [];
+    getAllWeekEntries($scope.weekCount,$scope.yearCount);
+    setWeekTimeSheet($scope.weekCount,$scope.yearCount);
 
   });
 
