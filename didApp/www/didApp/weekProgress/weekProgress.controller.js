@@ -11,6 +11,8 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
   $scope.yearCount = $stateParams.currentYearNumber*1;
   $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
 
+  var allWeekTimeEntries = [];
+
   $scope.$on('didApp.didmobiledata',function(_,result){
     result.feed.entry.forEach(function(b){
       $scope.timesheet.push({
@@ -51,13 +53,47 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
     return weekStartEnd;
   };//end of getWeekStartEnd()
 
-  $scope.getWeeklyTimesheet = function(weekNumber,yearNumber){
-      $scope.timesheet.forEach(function(entry){
-        if (entry.weekNumber==weekNumber && entry.yearNumber==yearNumber) {
 
-        }//end if
-      });//end forEach
-  };//end of getWeeklyTimesheet()
+  function getAllWeekEntries(weekNumber,yearNumber){
+
+    $scope.timesheet.forEach(function(entry){
+      if (entry.weekNumber==weekNumber && entry.yearNumber==yearNumber) {
+            allWeekTimeEntries.push(entry);
+      }//end if
+    });//end forEach
+    return allWeekTimeEntries;
+  };
+
+  function getTotalHoursPerDay(date,weekNumber,yearNumber){
+    var totalHours = 0;
+    getAllWeekEntries(weekNumber,yearNumber).forEach(function(day){
+
+      if (moment(day.startTime).format('MMM, dddd DD') == date) {
+        console.log(day)
+        totalHours +=day.duration*1
+      }
+    });//end foreach
+
+    return totalHours;
+  };
+
+  function getStateOfDay(date){
+
+  };
+
+  function setWeekTimeSheet(weekNumber,yearNumber){
+    for (var i = 1; i < 6; i++) {
+      var weekStartDate = moment(String(weekNumber)+ yearNumber,'WWYYYY').startOf('isoWeek').day(i).format('MMM, dddd DD')
+
+          $scope.weeklyTimesheet.push({
+            date : weekStartDate,
+            hours : getTotalHoursPerDay(weekStartDate,weekNumber,yearNumber)
+          });
+
+
+    };//end for
+    console.log($scope.weeklyTimesheet);
+  };
 
   $scope.addOneWeek =function(){
     $scope.weekCount += 1;
@@ -71,6 +107,9 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
     console.log($scope.weekStartend);
   };//end of substractOneWeek()
 
+  $scope.click = function(){
+  setWeekTimeSheet('32','2015');
+  };
 
 
 };//end of weekProgressCtrl
