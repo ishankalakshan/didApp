@@ -4,12 +4,21 @@ angular.module('didApp.weekProgressController', ['angularMoment'])
 
 function weekProgressCtrl($scope,$stateParams,didAppDataService){
 
-  didAppDataService.loadData();
-  $scope.timesheet = [];
+
   $scope.weeklyTimesheet = [];
   $scope.weekCount = $stateParams.currentWeekNumber*1;
   $scope.yearCount = $stateParams.currentYearNumber*1;
-  $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
+
+
+
+
+  ionic.Platform.ready(function(){
+    didAppDataService.loadData();
+    $scope.timesheet = [];
+    $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount); 
+
+
+  });
 
   var allWeekTimeEntries = [];
 
@@ -55,25 +64,24 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
 
 
   function getAllWeekEntries(weekNumber,yearNumber){
-
+    allWeekTimeEntries = [];
+    $scope.weekStartend = getWeekStartEnd(weekNumber,yearNumber);
     $scope.timesheet.forEach(function(entry){
       if (entry.weekNumber==weekNumber && entry.yearNumber==yearNumber) {
             allWeekTimeEntries.push(entry);
       }//end if
     });//end forEach
+    console.log(allWeekTimeEntries);
     return allWeekTimeEntries;
   };
 
-  function getTotalHoursPerDay(date,weekNumber,yearNumber){
+  function getTotalHoursPerDay(date){
     var totalHours = 0;
-    getAllWeekEntries(weekNumber,yearNumber).forEach(function(day){
-
+    allWeekTimeEntries.forEach(function(day){
       if (moment(day.startTime).format('MMM, dddd DD') == date) {
-        console.log(day)
         totalHours +=day.duration*1
       }
     });//end foreach
-
     return totalHours;
   };
 
@@ -82,33 +90,41 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
   };
 
   function setWeekTimeSheet(weekNumber,yearNumber){
+    //var weeklyTimesheet = [];
     for (var i = 1; i < 6; i++) {
       var weekStartDate = moment(String(weekNumber)+ yearNumber,'WWYYYY').startOf('isoWeek').day(i).format('MMM, dddd DD')
 
           $scope.weeklyTimesheet.push({
-            date : weekStartDate,
-            hours : getTotalHoursPerDay(weekStartDate,weekNumber,yearNumber)
+            date : moment(weekStartDate,'MMM, dddd DD').format('ddd'),
+            hours : getTotalHoursPerDay(weekStartDate),
+            state : 'Approved'
           });
 
-
     };//end for
-    console.log($scope.weeklyTimesheet);
   };
 
   $scope.addOneWeek =function(){
     $scope.weekCount += 1;
+    console.log($scope.weekCount);
+    $scope.weeklyTimesheet = [];
     $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
-    console.log($scope.weekStartend);
+    getAllWeekEntries($scope.weekCount,$scope.yearCount);
+    setWeekTimeSheet($scope.weekCount,$scope.yearCount);
   };//end of addOneWeek()
 
   $scope.substractOneWeek =function(){
     $scope.weekCount -= 1;
+    console.log($scope.weekCount);
+    $scope.weeklyTimesheet = [];
     $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
-    console.log($scope.weekStartend);
+    getAllWeekEntries($scope.weekCount,$scope.yearCount);
+    setWeekTimeSheet($scope.weekCount,$scope.yearCount);
   };//end of substractOneWeek()
 
-  $scope.click = function(){
-  setWeekTimeSheet('32','2015');
+  $scope.onLoad = function(){
+
+    getAllWeekEntries('37','2015');
+    setWeekTimeSheet('37','2015');
   };
 
 

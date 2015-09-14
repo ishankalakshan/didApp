@@ -9,23 +9,23 @@
       <button class="button button-clear" ng-click='substractOneWeek()'>
         <i class='icon ion-ios-minus-outline'></i>
       </button>
-      <button class="button button-clear" ng-click='click()'>
+      <button class="button button-clear" ng-click='addOneWeek()'>
         <i class='icon ion-ios-plus-outline'></i>
       </button>
   </ion-nav-buttons>
 
     <ion-content>
       <ion-list>
-        <ion-item>
+        <ion-item ng-repeat='day in weeklyTimesheet'>
           <div class="row">
-            <div class="col">Mon</div>
-            <div class="col">8h</div>
+            <div class="col">{{day.date}}</div>
+            <div class="col">{{day.hours}}</div>
             <div class="col"><button class="button button-small button-clear" ng-click='getDate()'>
               <i class='icon icon-approved'></i>
             </button></div>
           </div>
         </ion-item>
-        <ion-item>
+        <!-- <ion-item>
           <div class="row">
             <div class="col">Tue</div>
             <div class="col">5.5h</div>
@@ -60,7 +60,7 @@
               <i class='icon icon-pending'></i>
             </button></div>
           </div>
-        </ion-item>
+        </ion-item> -->
       </ion-list>
     </ion-content>
 </ion-view>
