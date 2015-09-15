@@ -4,13 +4,8 @@ angular.module('didApp.weekProgressController', ['angularMoment'])
 
 function weekProgressCtrl($scope,$stateParams,didAppDataService){
 
-
-
   $scope.weekCount = $stateParams.currentWeekNumber*1;
   $scope.yearCount = $stateParams.currentYearNumber*1;
-
-
-
 
   ionic.Platform.ready(function(){
     didAppDataService.loadData();
@@ -85,24 +80,57 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
       }
     });//end foreach
     return totalHours;
-  };
+  };//end of getTotalHoursPerDay
 
   function getStateOfDay(date){
+    var suggestCount= 0;
+    allWeekTimeEntries.forEach(function(day){
+      if (moment(day.startTime).format('MMM, dddd DD') == date && day.state =='Suggested') {
+        suggestCount +=1
+      }
+    });//end foreach
+    if (suggestCount>0) {
+      return false;
+    }else {
+      return true;
+    }
+  };//end of getStateOfDay
 
+  function getStateOfWeek(){
+    var suggestedCount =0;
+    var approvedCount = 0;
+
+    allWeekTimeEntries.forEach(function(day){
+      if (day.state =='Suggested') {
+        suggestedCount +=1
+      }
+      if (day.state =='Approved') {
+        approvedCount +=1
+      }
+    });//end foreach
+    if (approvedCount > 0) {
+      console.log('Display already confirmed');
+      return 'Confirmed';
+    }else if (suggestedCount >0 ) {
+      console.log('dont display button');
+      return 'Suggested';
+    }else if (suggestedCount==0 && approvedCount ==0) {
+      console.log('Display this is what i DId button');
+      return 'DidIt';
+
+    }
   };
 
   function setWeekTimeSheet(weekNumber,yearNumber){
-    //var weeklyTimesheet = [];
     for (var i = 1; i < 6; i++) {
       var weekStartDate = moment(String(weekNumber)+ yearNumber,'WWYYYY').startOf('isoWeek').day(i).format('MMM, dddd DD')
-
           $scope.weeklyTimesheet.push({
             date : moment(weekStartDate,'MMM, dddd DD').format('ddd'),
             hours : getTotalHoursPerDay(weekStartDate),
-            state : 'Approved'
+            state : getStateOfDay(weekStartDate)
           });
-
     };//end for
+
   };
 
   $scope.addOneWeek =function(){
@@ -112,6 +140,7 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
     $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
     getAllWeekEntries($scope.weekCount,$scope.yearCount);
     setWeekTimeSheet($scope.weekCount,$scope.yearCount);
+    $scope.stateWeek =getStateOfWeek();
   };//end of addOneWeek()
 
   $scope.substractOneWeek =function(){
@@ -121,6 +150,7 @@ function weekProgressCtrl($scope,$stateParams,didAppDataService){
     $scope.weekStartend = getWeekStartEnd($scope.weekCount,$scope.yearCount);
     getAllWeekEntries($scope.weekCount,$scope.yearCount);
     setWeekTimeSheet($scope.weekCount,$scope.yearCount);
+    $scope.stateWeek =getStateOfWeek();
   };//end of substractOneWeek()
 
   $scope.onLoad = function(){
